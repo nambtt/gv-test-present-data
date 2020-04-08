@@ -1,26 +1,31 @@
 import React from 'react';
+import filmApi from '../src/api/GhibliFilms';
+
+import FilmCards from './components/FilmCards';
+
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    
+    state = {films: []};
+    
+    componentDidMount = async () => {
+        const response = await filmApi.get();
+        this.setState({films: response.data});
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <div className="ui container">
+                    <div className="ui header">{this.state.films.length} films in total.</div>
+                    <FilmCards films={this.state.films}></FilmCards>
+                </div>
+            </div>
+        );
+    }
+    
 }
 
 export default App;
